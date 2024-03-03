@@ -1,4 +1,3 @@
-Sure, here's a README template you can use for your GitHub repository:
 
 ---
 
@@ -59,14 +58,75 @@ GET /products/{id}
 GET /products/category/{category}/{value}
 ```
 
-## Database
+```markdown
+## Example GET Requests
 
-The products are stored in a separate module named `ProductsDB`. You can modify this module to add, update, or remove products as needed.
+You can use the provided `products` array to simulate GET requests to retrieve product information.
 
-## Contributing
+### Retrieve All Products
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, feel free to open an issue or submit a pull request.
+Send a GET request to `/products` to retrieve all products.
 
----
+```
+```http
+GET /products
+```
 
-Make sure to replace placeholders like `{id}`, `{category}`, `{value}`, and `yourusername` with actual values relevant to your project. Additionally, don't forget to include a `LICENSE` file in your repository if you choose to use the MIT License or any other license.
+Response:
+
+```json
+{
+  "status": 200,
+  "products": [
+    { "id": 1, "name": "shirt", "price": 400, "gender": "man", "quantity": 5 },
+    { "id": 2, "name": "pant", "price": 200, "gender": "man", "quantity": 10 },
+    { "id": 3, "name": "cap", "price": 50, "gender": "unisex", "quantity": 15 },
+    { "id": 4, "name": "pant", "price": 600, "gender": "woman", "quantity": 20 }
+  ]
+}
+```
+
+### Retrieve Product by ID
+
+Send a GET request to `/products/{id}` to retrieve a product by its ID.
+
+Replace `{id}` with the ID of the product you want to retrieve.
+
+```http
+GET /products/2
+```
+
+Response:
+
+```json
+{
+  "status": 200,
+  "product": { "id": 2, "name": "pant", "price": 200, "gender": "man", "quantity": 10 }
+}
+```
+
+### Filter Products by Gender
+
+Send a GET request to `/products/category/gender/{gender}` to filter products by gender.
+
+Replace `{gender}` with the gender you want to filter by.
+
+```http
+GET /products/category/gender/man
+```
+
+Response:
+
+```json
+{
+  "status": 200,
+  "products": [
+    { "id": 1, "name": "shirt", "price": 400, "gender": "man", "quantity": 5 },
+    { "id": 2, "name": "pant", "price": 200, "gender": "man", "quantity": 10 }
+  ]
+}
+```
+
+
+
+
