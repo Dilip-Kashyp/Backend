@@ -1,64 +1,87 @@
+# Simple E-commerce API
 
----
+This is a simple Express.js API for managing a product catalog and a shopping cart.
 
-# Express Products API
+## Features
 
-This is a simple Express.js API for managing products stored in a database. It provides endpoints to retrieve all products, get a specific product by its ID, and filter products by category and value.
+- Retrieve all products
+- Retrieve a single product by its ID
+- Retrieve products based on a specified category and value
+- Add a product to the shopping cart
+- Remove a product from the shopping cart
+- Retrieve the items in the shopping cart along with their total price
 
-## Installation
+## Setup
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/yourusername/express-products-api.git
-```
+    ```bash
+    git clone https://github.com/your-username/simple-e-commerce-api.git
+    ```
 
-2. Install dependencies:
+2. Navigate to the project directory:
 
-```bash
-cd express-products-api
-npm install
-```
+    ```bash
+    cd simple-e-commerce-api
+    ```
 
-3. Start the server:
+3. Install dependencies:
 
-```bash
-npm start
-```
+    ```bash
+    npm install
+    ```
+
+4. Start the server:
+
+    ```bash
+    npm start
+    ```
 
 ## Usage
 
-### Endpoints
+### Ping
 
-- `GET /ping`: A simple endpoint to check if the server is running. Returns "pong" if the server is up.
+- **URL**: `/ping`
+- **Method**: `GET`
+- **Description**: Check if the server is running.
 
-- `GET /products`: Retrieves all products from the database.
+### Get All Products
 
-- `GET /products/:id`: Retrieves a specific product by its ID.
+- **URL**: `/products`
+- **Method**: `GET`
+- **Description**: Retrieve all products.
 
-- `GET /products/category/:category/:value`: Filters products by a specific category and value.
+### Get Product by ID
 
-### Example Requests
+- **URL**: `/products/:id`
+- **Method**: `GET`
+- **Description**: Retrieve a single product by its ID.
 
-- Retrieve all products:
+### Get Products by Category
 
-```http
-GET /products
-```
+- **URL**: `/products/category/:category/:value`
+- **Method**: `GET`
+- **Description**: Retrieve products based on a specified category and value.
 
-- Retrieve a product by ID (replace `{id}` with the actual ID):
+### Get Shopping Cart
 
-```http
-GET /products/{id}
-```
+- **URL**: `/product/cart`
+- **Method**: `GET`
+- **Description**: Retrieve the items in the shopping cart along with their total price.
 
-- Filter products by category and value (replace `{category}` and `{value}` with the actual category and value):
+### Add Product to Cart
 
-```http
-GET /products/category/{category}/{value}
-```
+- **URL**: `/product/cart/add/:id`
+- **Method**: `GET`
+- **Description**: Add a product to the shopping cart by its ID.
 
-```markdown
+### Remove Product from Cart
+
+- **URL**: `/product/cart/remove/:id`
+- **Method**: `GET`
+- **Description**: Remove a product from the shopping cart by its ID.
+
+---
 ## Example GET Requests
 
 You can use the provided `products` array to simulate GET requests to retrieve product information.
@@ -126,6 +149,73 @@ Response:
   ]
 }
 ```
+Certainly! Here's an extension of the README.md file with examples for the cart functions:
+
+## Example Cart Operations
+
+You can use the provided endpoints to simulate cart operations.
+
+### Retrieve Cart
+
+Send a GET request to `/product/cart` to retrieve the items in the shopping cart along with their total price.
+
+```http
+GET /product/cart
+```
+
+Response:
+
+```json
+{
+  "status": 200,
+  "Total Price": 600,
+  "cart items": [
+    { "id": 1, "name": "shirt", "price": 400, "gender": "man", "quantity": 5 },
+    { "id": 2, "name": "pant", "price": 200, "gender": "man", "quantity": 10 }
+  ]
+}
+```
+
+### Add Product to Cart
+
+Send a GET request to `/product/cart/add/{id}` to add a product to the shopping cart by its ID.
+
+Replace `{id}` with the ID of the product you want to add to the cart.
+
+```http
+GET /product/cart/add/3
+```
+
+Response:
+
+```json
+{
+  "status": 200,
+  "message": "Product added"
+}
+```
+
+### Remove Product from Cart
+
+Send a GET request to `/product/cart/remove/{id}` to remove a product from the shopping cart by its ID.
+
+Replace `{id}` with the ID of the product you want to remove from the cart.
+
+```http
+GET /product/cart/remove/1
+```
+
+Response:
+
+```json
+{
+  "status": 200,
+  "message": "Product Removed from cart"
+}
+```
+
+---
+
 
 
 
