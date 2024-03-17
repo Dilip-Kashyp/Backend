@@ -5,7 +5,7 @@ const app = express();
 const cart = [];
 
 app.get("/ping", (_, res) => {
-    res.json({
+    res.status(200).json({
         "ping" : "pong",
     })
 });
@@ -14,15 +14,13 @@ app.get("/ping", (_, res) => {
 const GetAllProduct = (_, res) => {
     const product = products.map(product => product );
     if(product.status == 200){
-        res.json({
-            "status" : 200,
+        res.status(200).json({
             "product" : product,
         });
     }
     else{
-        res.status(400).json({
-            "status" : 400,
-            "massage" : "Product not Found"
+        res.status(404).json({
+            "message" : "Product not Found"
         })
     }
 };
@@ -31,15 +29,13 @@ const GetProduct = (req,res) => {
     const id = req.params.id;
     const getproduct = products.filter(products => products.id == id);
     if(getproduct.status == 200){
-        res.json({
-            "status" : 200,
+        res.status(200).json({
             "product" : getproduct,
         });
     }
     else{
-        res.status(400).json({
-            "status" : 400,
-            "massage" : "Product not Found"
+        res.status(404).json({
+            "message" : "Product not Found"
         })
     }   
 }
@@ -49,15 +45,13 @@ const GetProductBy = (req, res) => {
     const value = req.params.value;
     const product = products.filter(products => products[category] == value);
     if(product.status == 200){
-        res.json({
-            "status" : 200,
+        res.status(200).json({
             "product" : product,
         });
     }
     else{
-        res.status(400).json({
-            "status" : 400,
-            "massage" : "Product not Found"
+        res.status(404).json({
+            "message" : "Product not Found"
         })
     }
 };
@@ -69,15 +63,13 @@ const GetCart = (_, res) => {
     });
 
     if(cart.length !== 0){
-        res.json({
-            "status" : 200,
+        res.status(200).json({
             'Total Price' : total,
             "cart items " : cart,    
         });
     }
     else{
-        res.status(400).json({
-            "status" : 400,
+        res.status(404).json({
             "cart" : "No product found"
         });
     };
@@ -88,14 +80,12 @@ const AddToCart = (req, res) => {
     const product = products.find(product => product.id == id);
     if(product){
         cart.push(product);
-        res.json({
-            "status" : 200,
+        res.status(200).json({
              "message" : "Product added"
         })
     }
     else{
         res.status(400).json({
-            "status" : 400,
             "message" : "Product not found"
         });
     };
@@ -106,14 +96,12 @@ const RemoveCart = (req, res) => {
     const product = cart.findIndex(product => product.id == id);
     if(product  !== -1){
         cart.splice(product, 1);
-        res.json({
-            "status" : 200,
+        res.status(200).json({
             "message" : "Product Removed from cart"
         })
     }
     else{
         res.status(400).json({
-            "status" : 400,
             "message" : "Product not found in cart"
         })
     }
