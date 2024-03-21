@@ -20,7 +20,7 @@ const GetAllProduct = (_, res) => {
     }
     else{
         res.status(404).json({
-            "message" : "Product not Found"
+            "message" : "product not found"
         })
     }
 };
@@ -35,26 +35,30 @@ const GetProduct = (req,res) => {
     }
     else{
         res.status(404).json({
-            "message" : "Product not Found"
+            "message" : "product not foun"
         })
     }   
 }
 
 const GetProductBy = (req, res) => {
-    const category = req.params.category;
-    const value = req.params.value;
-    const product = products.filter(products => products[category] == value);
-    if(product.status == 200){
+    const category = req.query.category; 
+    const value = req.query.value; 
+    console.log(category, value)
+
+    const product = products.filter(product => product[category] === value);
+
+    if(product.length > 0){ 
         res.status(200).json({
-            "product" : product,
+            "products" : product, 
         });
     }
     else{
         res.status(404).json({
-            "message" : "Product not Found"
-        })
+            "message" : "No products found" 
+        });
     }
 };
+
 
 const GetCart = (_, res) => {
     let total = 0;
@@ -64,13 +68,13 @@ const GetCart = (_, res) => {
 
     if(cart.length !== 0){
         res.status(200).json({
-            'Total Price' : total,
-            "cart items " : cart,    
+            "total" : total,
+            "items" : cart,    
         });
     }
     else{
         res.status(404).json({
-            "cart" : "No product found"
+            "message" : "no product found"
         });
     };
 };
@@ -80,13 +84,13 @@ const AddToCart = (req, res) => {
     const product = products.find(product => product.id == id);
     if(product){
         cart.push(product);
-        res.status(200).json({
-             "message" : "Product added"
+        res.status(201).json({
+             "message" : "product added"
         })
     }
     else{
         res.status(400).json({
-            "message" : "Product not found"
+            "message" : "product not found"
         });
     };
 };
@@ -97,25 +101,22 @@ const RemoveCart = (req, res) => {
     if(product  !== -1){
         cart.splice(product, 1);
         res.status(200).json({
-            "message" : "Product Removed from cart"
+            "message" : "product removed from cart"
         })
     }
     else{
-        res.status(400).json({
-            "message" : "Product not found in cart"
+        res.status(404).json({
+            "message" : "product not found in cart"
         })
-    }
-        
-    
-
+    }       
 }
 
 
 app.get('/products', GetAllProduct);
 app.get('/products/:id', GetProduct);
-app.get("/products/category/:category/:value", GetProductBy);
+app.get("/product", GetProductBy);
 app.get("/product/cart", GetCart);
 app.get("/product/cart/add/:id", AddToCart);
 app.get("/product/cart/remove/:id", RemoveCart);
 
-module.exports = app;    
+module.exports = app;       
