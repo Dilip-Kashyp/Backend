@@ -1,44 +1,29 @@
 const express = require('express');
-const products = require('./ProductsDB')
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const products = require('../resource/ProductsDB')
+const Users = require('../resource/UserDB')
+const cart = require('../resource/cart')
 const app = express();
 
-const cart = [];
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-app.get("/ping", (_, res) => {
-    res.status(200).json({
-        "ping" : "pong",
-    })
-});
-
-
-const GetAllProduct = (_, res) => {
-    const product = products.map(product => product );
-    if(product.status == 200){
-        res.status(200).json({
-            "product" : product,
-        });
-    }
-    else{
-        res.status(404).json({
-            "message" : "product not found"
-        })
-    }
-};
-
-const GetProduct = (req,res) => {
+const Product = (req,res) => {
     const id = req.params.id;
     const getproduct = products.filter(products => products.id == id);
-    if(getproduct.status == 200){
+    if(getproduct){
         res.status(200).json({
             "product" : getproduct,
         });
     }
     else{
         res.status(404).json({
-            "message" : "product not foun"
+            "message" : "product not found"
         })
     }   
-}
+};
 
 const GetProductBy = (req, res) => {
     const category = req.query.category; 
@@ -47,7 +32,7 @@ const GetProductBy = (req, res) => {
 
     const product = products.filter(product => product[category] === value);
 
-    if(product.length > 0){ 
+    if(product){ 
         res.status(200).json({
             "products" : product, 
         });
@@ -58,7 +43,6 @@ const GetProductBy = (req, res) => {
         });
     }
 };
-
 
 const GetCart = (_, res) => {
     let total = 0;
@@ -109,14 +93,41 @@ const RemoveCart = (req, res) => {
             "message" : "product not found in cart"
         })
     }       
+};
+
+const GetUser = (req, res) => {
+    const email = req.params.email;
+    const getuser = Users.find(User => User.email == email);
+    if(getuser){
+        res.json({
+            "message" : `user found with ${email} email`,
+            "User" : getuser,
+        })
+    }
+    else{
+        res.json({
+            "message" : `user not found with ${email} emali` 
+        })
+    }
+} 
+
+const CreateUser = (req, res) => {
+    const { name, email, password } = req.body;
+    const user = {
+        "name" : name,
+        "email" : email,
+        "password" : password,
+    }
+    Users.push(user);
+    res.send(`Form submitted successfully!, ${user}`);
 }
 
-
-app.get('/products', GetAllProduct);
-app.get('/products/:id', GetProduct);
 app.get("/product", GetProductBy);
+app.get("/products/:id", Product);
 app.get("/product/cart", GetCart);
-app.get("/product/cart/add/:id", AddToCart);
-app.get("/product/cart/remove/:id", RemoveCart);
+app.get("/login/:email", GetUser);
+app.post("/account", CreateUser);
+app.post("/product/cart/add/:id", AddToCart);
+app.post("/product/cart/remove/:id", RemoveCart);
 
-module.exports = app;       
+module.exports = app;  

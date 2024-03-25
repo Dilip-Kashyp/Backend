@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Cart</title>
+</head>
+<body>
+  <header>
+    <nav class="bg-white border-gray-200 dark:bg-gray-900">
+      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+      <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
+      <img src="https://flowbite.com/docs/images/logo.svg" class="h-8" alt="Flowbite Logo" />
+      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Shopify</span>
+      </a>
+        <div class="flex md:order-2 space-x-1 md:space-x-0 rtl:space-x-reverse">
+      <a href="http://localhost:5500/login" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</a>
+  </div>
+  <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+    <a href="/cart" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Cart</a>
+</div>
+  <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-cta">
+    <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+      <li>
+        <a href="/" class="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:dark:text-blue-500" aria-current="page">Home</a>
+      </li>
+      <li>
+        <a href="http://localhost:8000/product?category=gender&value=woman" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Woman</a>
+      </li>
+      <li>
+        <a href="http://localhost:8000/product?category=gender&value=man" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 d:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Man</a>
+      </li>
+      <li>
+        <a href="" class="block py-2 px-3 md:p-0 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Category</a>
+      </li>
+    </ul>
+  </div>
+  </div>
+        </nav>
+    </header>
+    <div class="relative z-10" aria-labelledby="slide-over-title" role="dialog" aria-modal="true">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+      
+        <div class="fixed inset-0 overflow-hidden">
+          <div class="absolute inset-0 overflow-hidden">
+            <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+
+              <div class="pointer-events-auto w-screen max-w-md">
+                <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                  <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                    <div class="flex items-start justify-between">
+                      <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">Shopping cart</h2>
+                      <div class="ml-3 flex h-7 items-center">
+                        <a href="/" class="relative -m-2 p-2 text-gray-400 hover:text-gray-500">
+                          <span class="absolute -inset-0.5"></span>
+                          <span class="sr-only">Close panel</span>
+                          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </a>
+                      </div>
+                    </div>
+                    <% if(cartdata.message === 'no product found') { %>
+                      <h1> No Product Found</h1>
+                  <% } else {%>
+  
+      <!-- -------------------------------------------------------- -->
+      <div class="mt-8">
+        <div class="flow-root">
+          <ul role="list" class="-my-6 divide-y divide-gray-200">
+            <% cartdata.items.forEach(item => { %>
+            <li class="flex py-6">
+              <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                <img src="<%= item.image %>" alt="Product Image" class="h-full w-full object-cover object-center">
+              </div>
+      
+              <div class="ml-4 flex flex-1 flex-col">
+                <div>
+                  <div class="flex justify-between text-base font-medium text-gray-900">
+                    <h3>
+                      <a href="#"><%= item.name %></a>
+                    </h3>
+                    <p class="ml-4">Rs <%= item.price %>.00</p>
+                  </div>
+                  <p class="mt-1 text-sm text-gray-500"><%= item.gender %></p>
+                </div>
+                <div class="flex flex-1 items-end justify-between text-sm">
+                  <p class="text-gray-500">Qty <%= item.quantity %></p>
+                  <div class="flex">
+                    <button type="button" onclick="RemoveItem('<%= item.id %>')" class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <% }); %>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+        <div class="flex justify-between text-base font-medium text-gray-900">
+          <p>Subtotal</p>
+          <p>Rs <%= cartdata.total %>.00</p>
+        </div>
+        <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+        <div class="mt-6">
+          <a href="#" class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Checkout</a>
+        </div>
+        <div class="mt-6 flex justify-center text-center text-sm text-gray-500">
+          <p>
+            or
+            <button type="button" class="font-medium text-indigo-600 hover:text-indigo-500">
+              Continue Shopping
+              <span aria-hidden="true"> &rarr;</span> 
+            </button>
+          </p>
+        </div>
+      </div>
+      <%}%>
+      
+      <script>
+        const RemoveItem = async (id) => {
+            try {
+                const response = await fetch(`http://localhost:8000/product/cart/remove/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                });
+    
+                if (response.ok) {
+                    window.location.reload(); 
+                } else {
+                    console.error('Failed to remove product from cart');
+                }
+            } catch (error) {
+                console.error('Error removing product from cart:', error);
+            }
+        };
+    </script>
+    
+      
+</body>
+</html>
