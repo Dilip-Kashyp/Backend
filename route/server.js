@@ -96,7 +96,7 @@ const RemoveCart = (req, res) => {
 };
 
 const GetUser = (req, res) => {
-    const email = req.params.email;
+    const {email,password} = req.body;
     const getuser = Users.find(User => User.email == email);
     if(getuser){
         res.json({
@@ -106,7 +106,8 @@ const GetUser = (req, res) => {
     }
     else{
         res.json({
-            "message" : `user not found with ${email} emali` 
+            "message" : `user not found with ${email} emali`,
+            "User" : '',
         })
     }
 } 
@@ -125,7 +126,7 @@ const CreateUser = (req, res) => {
 app.get("/product", GetProductBy);
 app.get("/products/:id", Product);
 app.get("/product/cart", GetCart);
-app.get("/login/:email", GetUser);
+app.post("/login", GetUser);
 app.post("/account", CreateUser);
 app.post("/product/cart/add/:id", AddToCart);
 app.post("/product/cart/remove/:id", RemoveCart);
