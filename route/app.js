@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session')
-const Users = require('../resource/UserDB');
+const Users = require('../config/userDB');
 const router = express.Router();
 
 router.use(cors());
@@ -13,7 +13,7 @@ router.use(session({
     secret : 'aabra ka daabra',
     resave : false,
     saveUninitialized : true
-}))
+}));
 
 
 const NotFound = (_, res) =>{
@@ -28,8 +28,10 @@ const MainPage = async (req, res) => {
     res.render('index', {product, sessions})
 };
 
-const ProductPage = async (_,res) => {
-    const response = await fetch('http://localhost:8000/products/2');
+const ProductPage = async (req ,res) => {
+    const id = 2;
+    console.log(id)
+    const response = await fetch(`http://localhost:8000/product/${id}`);
     const productData = await response.json();
     const product = productData.product; 
     res.render('product', {product})

@@ -1,16 +1,13 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const products = require('../resource/ProductsDB')
-const Users = require('../resource/UserDB')
-const cart = require('../resource/cart')
-const app = express();
+const products = require('../config/ProductsDB')
+const cart = require('../config/cart')
 
-app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+const getProducts = (req, res) => {
+    res.json({
+        products
+    })
+}
 
-const Product = (req,res) => {
+const product  = (req,res) => {
     const id = req.params.id;
     const getproduct = products.filter(products => products.id == id);
     if(getproduct){
@@ -25,7 +22,7 @@ const Product = (req,res) => {
     }   
 };
 
-const GetProductBy = (req, res) => {
+const getproduct = (req, res) => {
     const category = req.query.category; 
     const value = req.query.value; 
     console.log(category, value)
@@ -44,7 +41,7 @@ const GetProductBy = (req, res) => {
     }
 };
 
-const GetCart = (_, res) => {
+const getCart = (_, res) => {
     let total = 0;
     cart.forEach(product => {
         total += product.price;
@@ -63,7 +60,7 @@ const GetCart = (_, res) => {
     };
 };
 
-const AddToCart = (req, res) => {
+const addToCart = (req, res) => {
     const id = req.params.id;
     const product = products.find(product => product.id == id);
     if(product){
@@ -79,7 +76,7 @@ const AddToCart = (req, res) => {
     };
 };
 
-const RemoveCart = (req, res) => {
+const removeCart = (req, res) => {
     const id = req.params.id;
     const product = cart.findIndex(product => product.id == id);
     if(product  !== -1){
@@ -95,40 +92,5 @@ const RemoveCart = (req, res) => {
     }       
 };
 
-const GetUser = (req, res) => {
-    const {email,password} = req.body;
-    const getuser = Users.find(User => User.email == email);
-    if(getuser){
-        res.json({
-            "message" : `user found with ${email} email`,
-            "User" : getuser,
-        })
-    }
-    else{
-        res.json({
-            "message" : `user not found with ${email} emali`,
-            "User" : '',
-        })
-    }
-} 
 
-const CreateUser = (req, res) => {
-    const { name, email, password } = req.body;
-    const user = {
-        "name" : name,
-        "email" : email,
-        "password" : password,
-    }
-    Users.push(user);
-    res.send(`Form submitted successfully!, ${user}`);
-}
-
-app.get("/product", GetProductBy);
-app.get("/products/:id", Product);
-app.get("/product/cart", GetCart);
-app.post("/login", GetUser);
-app.post("/account", CreateUser);
-app.post("/product/cart/add/:id", AddToCart);
-app.post("/product/cart/remove/:id", RemoveCart);
-
-module.exports = app;  
+module.exports = { removeCart, addToCart, getCart, product, getProducts}
