@@ -1,25 +1,32 @@
 const Users = require('../config/userDB')
+const jwt = require('jsonwebtoken');
 
-const getUser = (req, res) => {
-    const {email,password} = req.body;
-    const getuser = Users.find(User => User.email == email);
-    const sessions = req.session.user
-    if(getuser){
-        res.json({
-            "message" : `user found with ${email} email`,
-            "session" : sessions,
-            "User" : getuser,
-        })
-    }
-    else{
-        res.json({
-            "message" : `user not found with ${email} emali`,
-            "User" : '',
-        })
-    }
+const currentUser = (req, res) => {
+    const user = req.user;
+    res.json(user)
 } 
 
-const createUser = (req, res) => {
+const login = (req, res) => {
+    const {email,password} = req.body;
+    const user = Users.find(User => User.email == email);
+    if(user){
+        const userToken = jwt.sign({
+            user : {
+                username : user.name,
+                email : user.email,
+                id : user.id
+            }
+        },
+            process.env.ACCESS_TOKEN,
+        );
+        res.status(200).json({userToken});
+    } else {
+            res.status(401)
+            throw new Error("Invalid email or password");
+    };
+};
+
+const register = (req, res) => {
     const { name, email, password } = req.body;
     if(!name || !email || !password){
         res.json({error : "All field Required"});
@@ -30,9 +37,9 @@ const createUser = (req, res) => {
         "email" : email,
         "password" : password,
     }
-    req.session.user = user.email
+  
     Users.push(user);
     res.json({ message : "User Registered", user});
 }
 
-module.exports = {createUser, getUser}
+module.exports = {register, login, currentUser}

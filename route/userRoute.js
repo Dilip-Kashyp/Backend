@@ -1,20 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const session = require('express-session')
 
-const {createUser, getUser } = require('../controller/userController')
+const {register, login, currentUser } = require('../controller/userController');
+const vaildateToken = require('../middleware/tokenHandler');
 
 const route = express.Router()
 route.use(bodyParser.urlencoded({ extended: true }));
 route.use(bodyParser.json());
 
-route.use(session({
-    secret : 'aabra ka daabra',
-    resave : false,
-    saveUninitialized : true
-}));
-
-route.post("/login", getUser);
-route.post("/register", createUser);
+route.get("/current",vaildateToken, currentUser)
+route.post("/login", login);
+route.post("/register", register);
 
 module.exports = route;

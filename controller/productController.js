@@ -41,29 +41,26 @@ const getproduct = (req, res) => {
     }
 };
 
-const getCart = (_, res) => {
-    let total = 0;
-    cart.forEach(product => {
-        total += product.price;
-    });
+const getCart = (req, res) => {
+    const userCart = cart.filter(item => item.user_id === req.user.id);
 
-    if(cart.length !== 0){
+    if (userCart) {
         res.status(200).json({
-            "total" : total,
-            "items" : cart,    
+            items: userCart
+        });
+    } else {
+        res.status(404).json({
+            message: "No cart found for the user"
         });
     }
-    else{
-        res.status(404).json({
-            "message" : "no product found"
-        });
-    };
 };
+
 
 const addToCart = (req, res) => {
     const id = req.params.id;
-    const product = products.find(product => product.id == id);
+    const product = products.find(items => items.id == id);
     if(product){
+        product.user_id = req.user.id;
         cart.push(product);
         res.status(201).json({
              "message" : "product added"
